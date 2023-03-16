@@ -125,11 +125,11 @@ function automount()
 
 function mountsdb()
 {
-    if grep -qs \x27/dev/sda3\x27 /proc/mounts; then
+    if grep -qs \x27/dev/sdb1\x27 /proc/mounts; then
         echo "/dev/sdb1 is mounted";
         mountsda
      else 
-        mount /dev/sdb1 /mnts;
+        mount /dev/sda3 /mnts;
         if grep -qs \x27/mnts\x27 /proc/mounts; then
             echo "/mnts is mounted";
         else
