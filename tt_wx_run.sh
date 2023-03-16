@@ -33,11 +33,11 @@ echo "
 
 "
 sleep 1s;
-if grep -qs \x27/dev/sda1\x27 /proc/mounts; then
-
-#/dev/sda1被挂载，将判断/dev/sdb1是被挂载
-sleep 1s;
 if grep -qs \x27/dev/sdb1\x27 /proc/mounts; then
+
+#/dev/sdb1被挂载，将判断/dev/sda3是被挂载
+sleep 1s;
+if grep -qs \x27/dev/sda3\x27 /proc/mounts; then
 sleep 1s;
 echo "
 
@@ -46,7 +46,7 @@ echo "
 "
 sleep 10s;
 
-#/dev/sdb1未被挂载，将进行格式化
+#/dev/sda3未被挂载，将进行格式化
 else
 echo "n
 
@@ -71,7 +71,7 @@ echo "
 "
 sleep 10s;
 fi
-#/dev/sda1未被挂载，将进行格式化
+#/dev/sda3未被挂载，将进行格式化
 else
 echo "n
 
@@ -86,7 +86,7 @@ p
 w
 
 "|fdisk -u /dev/sda;
-mkfs.ext4 /dev/sda1;
+mkfs.ext4 /dev/sda3;
 sleep 1s;
 choose=\x27false\x27;
 echo "
@@ -119,32 +119,32 @@ function automount()
     if grep -qs \x27/mnts\x27 /proc/mounts; then
         echo "/mnts is mounted"
     else
-        mountsda
-    fi
-}
-
-function mountsda()
-{
-    if grep -qs \x27/dev/sda1\x27 /proc/mounts; then
-        echo "/dev/sda1 is mounted";
         mountsdb
-     else 
-        mount /dev/sda1 /mnts;
-        if grep -qs \x27/mnts\x27 /proc/mounts; then
-            echo "/mnts is mounted";
-        else
-            mountsdb
-        fi
     fi
 }
 
 function mountsdb()
 {
-    if grep -qs \x27/dev/sdb1\x27 /proc/mounts; then
+    if grep -qs \x27/dev/sda3\x27 /proc/mounts; then
         echo "/dev/sdb1 is mounted";
+        mountsda
+     else 
+        mount /dev/sdb1 /mnts;
+        if grep -qs \x27/mnts\x27 /proc/mounts; then
+            echo "/mnts is mounted";
+        else
+            mountsda
+        fi
+    fi
+}
+
+function mountsda()
+{
+    if grep -qs \x27/dev/sda3\x27 /proc/mounts; then
+        echo "/dev/sda3 is mounted";
         mountmmcblk0
     else 
-        mount /dev/sdb1 /mnts;
+        mount /dev/sda3 /mnts;
         if grep -qs \x27/mnts\x27 /proc/mounts; then
             echo "/mnts is mounted";
         else
